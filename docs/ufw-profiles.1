@@ -1,0 +1,32 @@
+.\" Manpage for UFW-Profiles.
+.\" Contact dpenna.queiroz@gmail.com to correct errors or typos.
+.TH man 8 "11 Sep 2013" "1.0" "UFW-Profiles man page"
+.SH NAME
+ufw-profiles \- changes ufw configuration depending of active network
+.SH SYNOPSIS
+service ufw-profiles [start|stop|status]
+.SH DESCRIPTION
+UFW Profiles detects when you connect and disconnect to a network (wireless or wired) and change your UFW configuration to a specific
+profile.
+.SH CONFIGURATION
+The /etc/ufw/profiles/networks.conf file is responsible by mapping network names to profiles names.
+For example to use the profile 'my-network' every time you connect to 'my-wifi' network you should add the following entry to the networks.conf file:
+
+ my-wifi: my-network
+
+The profiles rules resides under the [network-name].rules under the same directory. So the rules for 'my-network' profiles should be placed on the file /etc/ufw/profiles/my-network.rules . 
+The next section explains this files in details.
+
+.SH PROFILES
+The profiles' rules files consist of a list of UFW rules, one per line. Of course you don't need to add the ufw command to the beginning of each line. The example below shows how your rules file should like if you want to allow traffic for OpenSSH and tcp for port 8888, for example:
+
+.RE
+        allow OpenSSH 
+        allow in 8888/tcp
+
+.SH SEE ALSO
+ufw(8)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Danilo Queiroz (dpenna.queiroz@gmail.com)
