@@ -1,0 +1,12 @@
+Source: ufw-profiles
+Maintainer: Danilo Queiroz <dpenna.queiroz@gmail.com>
+Section: python
+Priority: optional
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.4
+
+Package: ufw-profiles
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, ufw, python-pyinotify, python-ufw, python-dbus, python-gobject, python-notify2
+Description: Configuration profiles for UFW
+

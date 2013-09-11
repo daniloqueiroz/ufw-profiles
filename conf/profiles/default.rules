@@ -1,0 +1,4 @@
+# Default UFW rules
+# Add your rules here, one per line.
+# allow OpenSSH
+# allow in 53/udp 

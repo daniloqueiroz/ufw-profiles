@@ -1,0 +1,3 @@
+#! /bin/bash
+stop ufw-profiles
+find /lib/ufw-profiles/ -name '*.pyc' -delete
