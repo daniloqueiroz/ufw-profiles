@@ -1,3 +1,4 @@
 src/* lib/ufw-profiles
 conf/ufw-profiles.conf etc/init
+conf/ufw-profiles-notifier.desktop /etc/xdg/autostart 
 conf/profiles etc/ufw

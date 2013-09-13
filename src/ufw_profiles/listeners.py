@@ -23,6 +23,7 @@ from ufw_profiles.commons import CONFIG_DIR
 
 logger = logging.getLogger(__name__)
 
+
 class ConfigurationModificationListener(pyinotify.ProcessEvent):
     def __init__(self, handler):
         pyinotify.ProcessEvent.__init__(self)

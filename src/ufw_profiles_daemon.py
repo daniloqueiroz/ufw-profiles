@@ -22,7 +22,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 import gobject
 dbus.set_default_main_loop(DBusGMainLoop())
 
-from ufw_profiles.commons import ConfigManager
+from ufw_profiles.commons import ConfigManager, DbusConnector
 from ufw_profiles.profiles_manager import ProfileLoader
 from ufw_profiles.listeners import (ConnectionStateListener,
                                     ConfigurationModificationListener)
@@ -48,8 +48,9 @@ if __name__ == '__main__':
                         filemode='a')
     logger = logging.getLogger(__name__)
     logger.info("Starting UFW-Profiles daemon")
-        
-    profile_loader = ProfileLoader()
+    dbus_connector = DbusConnector(bus)
+
+    profile_loader = ProfileLoader(dbus_connector)
     handler = reload_profile_callback(profile_loader)
     ConnectionStateListener(bus, handler)
     files_listener = ConfigurationModificationListener(handler)

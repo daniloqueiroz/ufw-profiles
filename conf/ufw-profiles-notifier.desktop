@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.0
+X-Ubuntu-Gettext-Domain=ufw-profiles
+
+Name=UFW Profiles NotifiesBackup Monitor
+Comment=Shows UFW-Profiles notifications
+
+TryExec=/lib/ufw-profiles/ufw_profiles_notifier.py
+Exec=/lib/ufw-profiles/ufw_profiles_notifier.py
+
+X-GNOME-Autostart-Delay=10
+
+StartupNotify=false
+NoDisplay=true
+
+Type=Application
+Categories=System;Firewall;

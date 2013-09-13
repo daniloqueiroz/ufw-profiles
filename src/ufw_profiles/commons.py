@@ -16,20 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see [http://www.gnu.org/licenses/].
 """
 from ConfigParser import RawConfigParser
-import pynotify
+from dbus.service import Object, signal
 
 CONFIG_DIR = '/etc/ufw/profiles'
 _DEFAULT_PROFILE = 'default'
 _PROFILES_SECTION = 'profiles'
 _PROFILES_FILE = '%s/networks.conf' % CONFIG_DIR
 _PROFILE_RULES_PATTERN = CONFIG_DIR + '/%s.rules'
-
-pynotify.init("ufw-profiles")
-
-
-def show_notification(message):
-    notifications = pynotify.Notification("UFW Profiles", message)
-    notifications.show()
 
 
 class ConfigManager(object):
@@ -57,3 +50,16 @@ class ConfigManager(object):
         ConfigManager._config.read(_PROFILES_FILE)
 
 ConfigManager.reload()
+
+
+import logging
+logger = logging.getLogger(__name__)
+
+
+class DbusConnector(Object):
+    def __init__(self, bus):
+        Object.__init__(self, bus, '/bz/UFWProfiles')
+
+    @signal(dbus_interface='bz.ufwprofiles.Manager', signature='s')
+    def ufw_profile_message(self, message):
+        logger.info("sending message through dbus: %s", message)

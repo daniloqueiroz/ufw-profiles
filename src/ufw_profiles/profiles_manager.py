@@ -19,7 +19,8 @@ import logging
 from os import devnull
 from subprocess import call
 from NetworkManager import NetworkManager
-from ufw_profiles.commons import show_notification, ConfigManager
+from ufw_profiles.commons import ConfigManager
+import gobject
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,9 @@ class ProfileLoader(object):
     UFW_DEFAULT_COMMAND = 'ufw default deny'
     UFW_LOG_COMMAND = 'ufw logging low'
 
+    def __init__(self, dbus_connector):
+        self._dbus_connector = dbus_connector
+
     def reload(self):
         connection_name = self._get_connection_name()
         try:
@@ -42,19 +46,21 @@ class ProfileLoader(object):
             self._reset_firewall()
             if connection_name:
                 profile_name = ConfigManager.get_profile_for(connection_name)
-                logger.info("Loading profile %s for network %s",profile_name,
+                logger.info("Loading profile %s for network %s", profile_name,
                             connection_name)
                 self._load_profile(profile_name)
         except (UFWException, IOError):
             logger.error("Error activating profile for %s", connection_name)
             # send notification
-            show_notification("Error loading UFW profile")
+            self._dbus_connector.ufw_profile_message(
+                "Error loading UFW profile")
             raise
         else:
             if connection_name:
                 # send notification
-                show_notification("Profile '%s' for network '%s' loaded" %
-                                  (profile_name, connection_name))
+                self._dbus_connector.ufw_profile_message(
+                    "Profile '%s' for network '%s' loaded" %
+                    (profile_name, connection_name))
 
     def _get_connection_name(self):
         name = None
@@ -86,4 +92,3 @@ class ProfileLoader(object):
             if not rule.startswith('#'):
                 rule = 'ufw %s' % rule
                 self._execute_ufw_command(rule)
-
